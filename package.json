@@ -1,0 +1,37 @@
+{
+  "name": "@arnaud-barre/config-loader",
+  "description": "Loads a TS config file via esbuild and caches transpilation",
+  "version": "0.1.0",
+  "author": "Arnaud Barré (https://github.com/ArnaudBarre)",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf dist && tsc --declaration src/index.ts --outDir dist && scripts/bundle.ts",
+    "tsc": "tsc --noEmit",
+    "lint": "yarn lint-ci --fix --cache",
+    "lint-ci": "eslint src scripts --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prettier": "yarn prettier-ci --write",
+    "prettier-ci": "prettier --ignore-path .gitignore --check '**/*.{js,ts,json,md}'",
+    "publish": "bun run tsc && bun run lint-ci && bun run prettier-ci && bun run build && cd dist && npm publish"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "importOrderBuiltinModulesToTop": true,
+    "importOrder": [
+      "<THIRD_PARTY_MODULES>",
+      "",
+      "^[./]"
+    ]
+  },
+  "dependencies": {
+    "esbuild": "^0.14.48"
+  },
+  "devDependencies": {
+    "@arnaud-barre/eslint-config": "^1.0.9",
+    "@ianvs/prettier-plugin-sort-imports": "^3.4.2",
+    "@nabla/tnode": "^0.6.0",
+    "@types/node": "^18.0.3",
+    "eslint": "^8.17.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
+  }
+}
