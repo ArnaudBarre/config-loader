@@ -6,10 +6,10 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc --declaration src/index.ts --outDir dist && scripts/bundle.ts",
-    "tsc": "tsc --noEmit",
-    "lint": "yarn lint-ci --fix --cache",
+    "tsc": "tsc",
+    "lint": "bun run lint-ci --fix --cache",
     "lint-ci": "eslint src scripts --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "yarn prettier-ci --write",
+    "prettier": "bun run prettier-ci --write",
     "prettier-ci": "prettier --ignore-path .gitignore --check '**/*.{js,ts,json,md}'",
     "publish": "bun run tsc && bun run lint-ci && bun run prettier-ci && bun run build && cd dist && npm publish"
   },
