@@ -5,7 +5,7 @@ import { build, BuildResult, formatMessagesSync } from "esbuild";
 
 export type DefineConfig<T> = T | (() => Promise<T>);
 
-export const getConfig = async <Config extends Record<string, unknown>>(
+export const loadConfig = async <Config extends Record<string, unknown>>(
   name: string,
 ): Promise<Config | undefined> => {
   const entryPoint = `${name}.config.ts`;
