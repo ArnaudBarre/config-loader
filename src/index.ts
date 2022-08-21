@@ -14,7 +14,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   if (!existsSync(entryPoint)) return;
   const cache = jsonCache<{ files: [path: string, hash: string][] }>(
     join(cacheDir, "config-hashes.json"),
-    1,
+    2,
   );
   const files = cache.read()?.files;
   if (
@@ -30,6 +30,16 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
       metafile: true,
       bundle: true,
       platform: "node",
+      plugins: [
+        {
+          name: "externalize-deps",
+          setup: ({ onResolve }) => {
+            onResolve({ filter: /.*/u }, ({ path }) => {
+              if (!path.startsWith(".")) return { external: true };
+            });
+          },
+        },
+      ],
     });
     logEsbuildErrors(result);
     cache.write({
