@@ -105,8 +105,7 @@ export const getHash = (content: string | Buffer) =>
       content,
       typeof content === "string" ? "utf-8" : undefined,
     )
-    .digest("hex")
-    .slice(0, 8);
+    .digest("hex");
 
 export const readMaybeFileSync = (path: string) => {
   try {
