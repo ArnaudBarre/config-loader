@@ -69,6 +69,8 @@ export const jsonCache = <T extends Record<string, any>>(
     if (!content) return;
     const json = JSON.parse(content) as T & { version: number };
     if (json.version !== version) return;
+    // @ts-ignore
+    delete json.version;
     return json;
   },
   write: (data: T) => writeFileSync(path, JSON.stringify({ version, ...data })),
