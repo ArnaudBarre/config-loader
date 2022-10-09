@@ -50,10 +50,11 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const module = require(join(process.cwd(), output)) as {
-    config?: DefineConfig<Config>;
-  };
+  const path = join(process.cwd(), output);
+  /* eslint-disable @typescript-eslint/no-require-imports */
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+  delete require.cache[path];
+  const module = require(path) as { config?: DefineConfig<Config> };
   if (!module.config) {
     throw new Error(`${entryPoint} doesn't have a "config" export`);
   }
