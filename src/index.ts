@@ -7,7 +7,7 @@ export type DefineConfig<T> = T | (() => Promise<T>);
 
 export const loadConfig = async <Config extends Record<string, unknown>>(
   name: string,
-): Promise<Config | undefined> => {
+): Promise<{ config: Config; files: string[] } | undefined> => {
   const entryPoint = `${name}.config.ts`;
   const cacheDir = `node_modules/.${name}`;
   const output = join(cacheDir, "config.js");
@@ -16,7 +16,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
     join(cacheDir, "config-hashes.json"),
     2,
   );
-  const files = cache.read()?.files;
+  let files = cache.read()?.files;
   if (
     !files ||
     files.some(([path, hash]) => {
@@ -42,12 +42,11 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
       ],
     });
     logEsbuildErrors(result);
-    cache.write({
-      files: Object.keys(result.metafile.inputs).map((path) => [
-        path,
-        getHash(readFileSync(path)),
-      ]),
-    });
+    files = Object.keys(result.metafile.inputs).map((path) => [
+      path,
+      getHash(readFileSync(path)),
+    ]);
+    cache.write({ files });
   }
 
   const path = join(process.cwd(), output);
@@ -58,7 +57,13 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   if (!module.config) {
     throw new Error(`${entryPoint} doesn't have a "config" export`);
   }
-  return typeof module.config === "function" ? module.config() : module.config;
+  return {
+    config:
+      typeof module.config === "function"
+        ? await module.config()
+        : module.config,
+    files: files.map((f) => f[0]),
+  };
 };
 
 export const jsonCache = <T extends Record<string, any>>(
