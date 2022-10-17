@@ -68,12 +68,12 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
 
 export const jsonCache = <T extends Record<string, any>>(
   path: string,
-  version: number,
+  version: number | string,
 ) => ({
   read: (): T | undefined => {
     const content = readMaybeFileSync(path);
     if (!content) return;
-    const json = JSON.parse(content) as T & { version: number };
+    const json = JSON.parse(content) as T & { version: number | string };
     if (json.version !== version) return;
     // @ts-ignore
     delete json.version;
