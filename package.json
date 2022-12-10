@@ -1,7 +1,7 @@
 {
   "name": "@arnaud-barre/config-loader",
   "description": "Loads a TS config file via esbuild and caches transpilation",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "Arnaud Barré (https://github.com/ArnaudBarre)",
   "license": "MIT",
   "scripts": {
@@ -23,15 +23,15 @@
     ]
   },
   "dependencies": {
-    "esbuild": "^0.15.9"
+    "esbuild": "^0.16"
   },
   "devDependencies": {
-    "@arnaud-barre/eslint-config": "^1.0.12",
-    "@ianvs/prettier-plugin-sort-imports": "^3.4.2",
-    "@nabla/tnode": "^0.7.0",
-    "@types/node": "^18.7.23",
-    "eslint": "^8.24.0",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.3"
+    "@arnaud-barre/eslint-config": "^1.0.18",
+    "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
+    "@nabla/tnode": "^0.8.0",
+    "@types/node": "^18.11.12",
+    "eslint": "^8.29.0",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
   }
 }
