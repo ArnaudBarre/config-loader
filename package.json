@@ -2,7 +2,7 @@
   "name": "@arnaud-barre/config-loader",
   "description": "Loads a TS config file via esbuild and caches transpilation",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Arnaud Barré (https://github.com/ArnaudBarre)",
   "license": "MIT",
   "scripts": {

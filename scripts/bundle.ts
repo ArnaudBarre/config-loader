@@ -26,6 +26,7 @@ writeFileSync(
       version: packageJSON.version,
       author: packageJSON.author,
       license: packageJSON.license,
+      main: "index.js",
       repository: "ArnaudBarre/config-loader",
       dependencies: packageJSON.dependencies,
     },
