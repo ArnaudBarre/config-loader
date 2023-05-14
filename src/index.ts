@@ -1,6 +1,6 @@
-import { createHash } from "crypto";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { build, BuildResult, formatMessagesSync } from "esbuild";
 
 export type DefineConfig<T> = T | (() => Promise<T>);
@@ -14,7 +14,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   if (!existsSync(entryPoint)) return;
   const cache = jsonCache<{ files: [path: string, hash: string][] }>(
     join(cacheDir, "config-hashes.json"),
-    2,
+    3,
   );
   let files = cache.read()?.files;
   if (
@@ -29,6 +29,8 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
       outfile: output,
       metafile: true,
       bundle: true,
+      format: "esm",
+      target: "node16",
       platform: "node",
       plugins: [
         {
@@ -50,10 +52,9 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   }
 
   const path = join(process.cwd(), output);
-  /* eslint-disable @typescript-eslint/no-require-imports */
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete require.cache[path];
-  const module = require(path) as { config?: DefineConfig<Config> };
+  const module = (await import(`${path}?t=${Date.now()}`)) as {
+    config?: DefineConfig<Config>;
+  };
   if (!module.config) {
     throw new Error(`${entryPoint} doesn't have a "config" export`);
   }
@@ -75,7 +76,7 @@ export const jsonCache = <T extends Record<string, any>>(
     if (!content) return;
     const json = JSON.parse(content) as T & { version: number | string };
     if (json.version !== version) return;
-    // @ts-ignore
+    // @ts-expect-error
     delete json.version;
     return json;
   },
@@ -105,13 +106,9 @@ export const logEsbuildErrors = ({ errors, warnings }: BuildResult) => {
 };
 
 export const getHash = (content: string | Buffer) =>
-  createHash("sha1")
-    .update(
-      // @ts-ignore
-      content,
-      typeof content === "string" ? "utf-8" : undefined,
-    )
-    .digest("hex");
+  typeof content === "string"
+    ? createHash("sha1").update(content, "utf-8").digest("hex")
+    : createHash("sha1").update(content).digest("hex");
 
 export const readMaybeFileSync = (path: string) => {
   try {
