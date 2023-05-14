@@ -2,15 +2,15 @@
   "name": "@arnaud-barre/config-loader",
   "description": "Loads a TS config file via esbuild and caches transpilation",
   "type": "module",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "author": "Arnaud Barré (https://github.com/ArnaudBarre)",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc --strict --declaration src/index.ts --outDir dist && scripts/bundle.ts",
-    "lint": "bun run lint-ci --fix --cache",
+    "lint": "bun lint-ci --fix --cache",
     "lint-ci": "eslint src scripts --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "bun run prettier-ci --write",
-    "prettier-ci": "prettier --ignore-path .gitignore --check '**/*.{cjs,ts,json,md}'",
+    "prettier": "bun prettier-ci --write",
+    "prettier-ci": "prettier --cache --ignore-path .gitignore --check '**/*.{cjs,ts,json,md}'",
     "publish": "bun tsc && bun lint-ci && bun prettier-ci && bun run build && cd dist && npm publish"
   },
   "dependencies": {

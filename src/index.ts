@@ -14,7 +14,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   if (!existsSync(entryPoint)) return;
   const cache = jsonCache<{ files: [path: string, hash: string][] }>(
     join(cacheDir, "config-hashes.json"),
-    3,
+    4,
   );
   let files = cache.read()?.files;
   if (
@@ -49,6 +49,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
       getHash(readFileSync(path)),
     ]);
     cache.write({ files });
+    writeFileSync(join(cacheDir, "package.json"), '{ "type": "module" }');
   }
 
   const path = join(process.cwd(), output);
