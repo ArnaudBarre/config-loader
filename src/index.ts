@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { build, BuildResult, formatMessagesSync } from "esbuild";
+import { build, type BuildResult, formatMessagesSync } from "esbuild";
 
 export type DefineConfig<T> = T | (() => Promise<T>);
 
