@@ -81,14 +81,17 @@ export const jsonCache = <T extends Record<string, any>>(
     delete json.version;
     return json;
   },
-  write: (data: T) => writeFileSync(path, JSON.stringify({ version, ...data })),
+  write: (data: T): void => {
+    writeFileSync(path, JSON.stringify({ version, ...data }));
+  },
 });
 
-export const useColors = !(
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+export const useColors: boolean = !(
   "NO_COLOR" in process.env || process.argv.includes("--no-color")
 );
 
-export const logEsbuildErrors = ({ errors, warnings }: BuildResult) => {
+export const logEsbuildErrors = ({ errors, warnings }: BuildResult): void => {
   if (errors.length) {
     console.log(
       formatMessagesSync(errors, {
@@ -106,12 +109,12 @@ export const logEsbuildErrors = ({ errors, warnings }: BuildResult) => {
   }
 };
 
-export const getHash = (content: string | Buffer) =>
+export const getHash = (content: string | Buffer): string =>
   typeof content === "string"
     ? createHash("sha1").update(content, "utf-8").digest("hex")
     : createHash("sha1").update(content).digest("hex");
 
-export const readMaybeFileSync = (path: string) => {
+export const readMaybeFileSync = (path: string): string | undefined => {
   try {
     return readFileSync(path, "utf-8");
   } catch (err: any) {
