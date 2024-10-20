@@ -10,7 +10,7 @@ buildSync({
   outdir: "dist",
   format: "esm",
   platform: "node",
-  target: "node16",
+  target: "node18",
   external: Object.keys(packageJSON.dependencies),
 });
 
