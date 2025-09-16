@@ -1,8 +1,8 @@
-#!/usr/bin/env tnode
+#!/usr/bin/env node
 import { execSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { buildSync } from "esbuild";
-import packageJSON from "../package.json";
+import packageJSON from "../package.json" with { type: "json" };
 
 buildSync({
   bundle: true,
@@ -10,7 +10,7 @@ buildSync({
   outdir: "dist",
   format: "esm",
   platform: "node",
-  target: "node18",
+  target: "node22",
   external: Object.keys(packageJSON.dependencies),
 });
 
