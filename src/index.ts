@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { build, type BuildResult, formatMessagesSync } from "esbuild";
+import { build, formatMessagesSync, type Message } from "esbuild";
 
 export type DefineConfig<T> = T | (() => Promise<T>);
 
@@ -18,12 +18,13 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   );
   let files = cache.read()?.files;
   if (
-    !files ||
-    files.some(([path, hash]) => {
+    !files
+    || files.some(([path, hash]) => {
       const content = readMaybeFileSync(path);
       return !content || getHash(content) !== hash;
     })
   ) {
+    /* eslint-disable require-unicode-regexp */
     const result = await build({
       entryPoints: [entryPoint],
       outfile: output,
@@ -36,7 +37,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
         {
           name: "externalize-deps",
           setup: ({ onResolve }) => {
-            onResolve({ filter: /.*/u }, ({ path }) => {
+            onResolve({ filter: /.*/ }, ({ path }) => {
               if (!path.startsWith(".")) return { external: true };
             });
           },
@@ -91,17 +92,20 @@ export const useColors: boolean = !(
   "NO_COLOR" in process.env || process.argv.includes("--no-color")
 );
 
-export const logEsbuildErrors = ({ errors, warnings }: BuildResult): void => {
-  if (errors.length) {
+export const logEsbuildErrors = (result: {
+  errors: Message[];
+  warnings: Message[];
+}): void => {
+  if (result.errors.length) {
     console.log(
-      formatMessagesSync(errors, {
+      formatMessagesSync(result.errors, {
         kind: "error",
         color: useColors,
       }).join("\n"),
     );
-  } else if (warnings.length) {
+  } else if (result.warnings.length) {
     console.log(
-      formatMessagesSync(warnings, {
+      formatMessagesSync(result.warnings, {
         kind: "warning",
         color: useColors,
       }).join("\n"),
