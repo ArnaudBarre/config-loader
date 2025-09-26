@@ -9,7 +9,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
   name: string,
 ): Promise<{ config: Config; files: string[] } | undefined> => {
   const entryPoint = `${name}.config.ts`;
-  const cacheDir = `node_modules/.${name}`;
+  const cacheDir = `node_modules/.cache/${name}`;
   const output = join(cacheDir, "config.js");
   if (!existsSync(entryPoint)) return;
   const cache = jsonCache<{ files: [path: string, hash: string][] }>(
@@ -31,7 +31,7 @@ export const loadConfig = async <Config extends Record<string, unknown>>(
       metafile: true,
       bundle: true,
       format: "esm",
-      target: "node16",
+      target: "node22",
       platform: "node",
       plugins: [
         {

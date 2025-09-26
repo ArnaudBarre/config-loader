@@ -3,7 +3,7 @@
   "description": "Loads a TS config file via esbuild and caches transpilation",
   "type": "module",
   "private": true,
-  "version": "0.7.6",
+  "version": "0.7.7",
   "author": "Arnaud Barré (https://github.com/ArnaudBarre)",
   "license": "MIT",
   "dependencies": {
@@ -24,12 +24,12 @@
   },
   "devDependencies": {
     "@arnaud-barre/eslint-config": "^6.1.2",
-    "@arnaud-barre/prettier-plugin-sort-imports": "^0.2.2",
+    "@arnaud-barre/prettier-plugin-sort-imports": "^0.2.4",
     "@arnaud-barre/tsl-config": "^0.1.1",
     "@types/node": "^22.18.4",
-    "eslint": "^9.35.0",
+    "eslint": "^9.36.0",
     "prettier": "^3.6.2",
-    "tsl": "^1.0.23",
+    "tsl": "^1.0.25",
     "typescript": "~5.9"
   }
 }
